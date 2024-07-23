@@ -1,3 +1,5 @@
+//for testing routes
+
 const express = require("express");
 const app = express();
 const boards = require("./routes/boards");

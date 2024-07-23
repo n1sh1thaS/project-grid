@@ -28,9 +28,7 @@ router.post("/", async (req, res) => {
     if (!user) return res.status(404).send("User does not exist");
 
     const board = new Board({
-      user: {
-        username: user.username,
-      },
+      userId: req.body.userId,
       boardName: req.body.boardName,
     });
 
@@ -46,20 +44,19 @@ router.post("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const { error } = validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  /*const { error } = validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);*/
 
   try {
-    /*const user = await User.findById(res.userId);
+    /*const user = await User.findById(req.userId);
     if (!user) return res.status(404).send("User does not exist");*/
 
     const board = await Board.findByIdAndUpdate(
       req.params.id,
       {
-        /*user: {
-          username: user.username,
+        /*userId: req.body.userId,
         },*/
-        boardTitle: req.body.boardTitle,
+        boardName: req.body.boardName,
       },
       { new: true }
     );
@@ -76,7 +73,7 @@ router.delete("/:id", async (req, res) => {
     if (!board) return res.status(404).send("Board does not exist");
 
     await User.updateOne(
-      { _id: board.user._id },
+      { _id: board.userId },
       {
         $pull: {
           boardIds: board._id,

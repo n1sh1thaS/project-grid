@@ -3,9 +3,7 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 
 const boardSchema = new mongoose.Schema({
-  user: new mongoose.Schema({
-    username: { type: String },
-  }),
+  userId: { type: String },
   boardName: { type: String, minlength: 1, default: "Untitled Board" },
   toDo: { type: [String], default: [] },
   inProgress: { type: [String], default: [] },
