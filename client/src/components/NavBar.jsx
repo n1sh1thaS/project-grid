@@ -5,7 +5,7 @@ const NavBar = (props) => {
   const {showLogin, showSignup} = props
   return (
     <div>
-      <AppBar position="static" keepMounted sx={{marginBottom: '100px', background:'black'}}>
+      <AppBar position="static" sx={{marginBottom: '100px', background:'black'}}>
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <Typography variant="h6" component="div">
             <Button variant="text" href="/" sx={{ color: 'white', fontSize: 18 }}>Project Grid</Button>

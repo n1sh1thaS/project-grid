@@ -2,9 +2,16 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const cors = require("cors");
 const boards = require("./routes/boards");
 const tasks = require("./routes/tasks");
 const users = require("./routes/users");
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", //to allow requests
+  })
+);
 
 mongoose
   .connect("mongodb://localhost/project-grid")
@@ -16,5 +23,5 @@ app.use("/api/boards", boards);
 app.use("/api/tasks", tasks);
 app.use("/api/users", users);
 
-const PORT = process.env.PORT || 5173;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}...`));

@@ -7,9 +7,6 @@ const { User, validate } = require("../models/user");
 router.get("/me", async (req, res) => {
   res.send(await User.findById(req.user._id).select("-password"));
 });
-/*router.get("/:id", async (req, res) => {
-  res.send(await User.findById(req.params.id).select("-password"));
-});*/
 
 router.post("/", async (req, res) => {
   const { error } = validate(req.body);
@@ -26,7 +23,10 @@ router.post("/", async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
 
-    res.send(await user.save());
+    await user.save();
+
+    const token = user.generateJWT();
+    res.header("x-auth-token", token).send(token, user);
   } catch (ex) {
     console.log(ex.message);
   }
