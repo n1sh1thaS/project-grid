@@ -14,13 +14,13 @@ const SignUpForm = () => {
       email,
       password,
     };
-    console.log(user);
-    const { data } = await axios
+    await axios
       .post("http://localhost:3000/api/users", user)
-      .then((res) => console.log("posted new user", res.data))
+      .then((res) => {
+        const {data} = res;
+        localStorage.setItem('token', data.token);
+      })
       .catch((e) => console.log("user cannot be posted"));
-
-    localStorage.setItem('token', data.token);
   };
 
   return (

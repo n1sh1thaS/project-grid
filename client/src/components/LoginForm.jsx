@@ -1,6 +1,6 @@
 import {TextField, Button, Box, Typography} from "@mui/material";
 
-const SignUpForm = () => {
+const LoginForm = () => {
   return (
     <Box sx={{display: "flex", flexDirection: "column", gap: 2, alignItems: "center"}}>
       <Typography variant="h3" sx={{fontSize: 35, marginBottom: 5}}>Login to Project Grid</Typography>
@@ -25,4 +25,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default LoginForm;

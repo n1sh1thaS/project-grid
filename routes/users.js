@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
     await user.save();
 
     const token = user.generateJWT();
-    res.header("x-auth-token", token).send(token, user);
+    res.header("x-auth-token", token).send({ token, user });
   } catch (ex) {
     console.log(ex.message);
   }

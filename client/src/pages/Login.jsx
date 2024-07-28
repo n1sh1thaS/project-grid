@@ -10,7 +10,7 @@ const Login = () => {
         <Grid item xs={12}>
           <NavBar showLogin={false} showSignup={true}/>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} marginTop={18}>
           <Typography variant="h4" align="center">
             <LoginForm />
           </Typography>
