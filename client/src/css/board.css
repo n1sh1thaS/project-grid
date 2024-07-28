@@ -1,6 +1,10 @@
 .boardCategory{
     flex: 1;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    position: static;
+}
+
+ul{
+    list-style-type: none;
 }
