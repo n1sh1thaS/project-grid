@@ -4,7 +4,6 @@
     flex-direction: column;
     position: static;
 }
-
-ul{
+li {
     list-style-type: none;
 }

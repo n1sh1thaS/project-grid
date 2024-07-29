@@ -15,8 +15,8 @@ const TaskCard = (props) => {
   return (
     <Box margin={2} sx={{ width: "97%" }}>
       <Card sx={{ background: "rgb(243 244 246)", width: "97%" }}>
-        <CardContent>
-          <Typography gutterBottom variant="body1" component="div" align="left">
+        <CardContent align="left">
+          <Typography gutterBottom variant="body1" component="div">
             {title}
           </Typography>
           <Typography variant="body2" color="text.secondary">
