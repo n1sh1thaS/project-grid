@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Grid, Typography, Box, IconButton } from "@mui/material";
 import NavBar from "../components/NavBar";
-import { Grid, Typography, Box } from "@mui/material";
 import TaskCard from "../components/TaskCard";
+import AddTaskModal from "../components/AddTaskModal";
 import axios from "axios";
 import "../css/board.css";
 
@@ -12,6 +13,22 @@ const Board = () => {
   const [toDo, setToDo] = useState([]);
   const [inProg, setInProg] = useState([]);
   const [done, setDone] = useState([]);
+
+  let deleteTask = async (taskId) => {
+    const oldTasks = { toDo: [...toDo], inProg: [...inProg], done: [...done] };
+    setToDo(toDo.filter((task) => task.id !== taskId));
+    setInProg(inProg.filter((task) => task.id !== taskId));
+    setDone(done.filter((task) => task.id !== taskId));
+
+    await axios
+      .delete(`http://localhost:3000/api/tasks/${taskId}`)
+      .catch((err) => {
+        console.log("error deleting task", err);
+        setToDo(oldTasks.toDo);
+        setInProg(oldTasks.inProg);
+        setDone(oldTasks.done);
+      });
+  };
 
   useEffect(() => {
     getBoardIds();
@@ -146,10 +163,22 @@ const Board = () => {
                 marginBottom={3}
                 sx={{ fontSize: 25 }}
               >
-                To Do
+                <Box display="flex" alignItems="center" width="100%">
+                  <Box
+                    flexGrow={1}
+                    display="flex"
+                    justifyContent="center"
+                    marginLeft={5}
+                  >
+                    To Do
+                  </Box>
+                  <AddTaskModal />
+                </Box>
                 {toDo.map((task, index) => (
                   <TaskCard
                     key={index}
+                    taskId={task.id}
+                    onDelete={deleteTask}
                     title={task.title}
                     description={task.description}
                   />
@@ -170,10 +199,22 @@ const Board = () => {
                 marginBottom={3}
                 sx={{ fontSize: 25 }}
               >
-                In Progress
+                <Box display="flex" alignItems="center" width="100%">
+                  <Box
+                    flexGrow={1}
+                    display="flex"
+                    justifyContent="center"
+                    marginLeft={5}
+                  >
+                    In Progress
+                  </Box>
+                  <AddTaskModal />
+                </Box>
                 {inProg.map((task, index) => (
                   <TaskCard
                     key={index}
+                    taskId={task.id}
+                    onDelete={deleteTask}
                     title={task.title}
                     description={task.description}
                   />
@@ -194,10 +235,22 @@ const Board = () => {
                 marginBottom={3}
                 sx={{ fontSize: 25 }}
               >
-                Done
+                <Box display="flex" alignItems="center" width="100%">
+                  <Box
+                    flexGrow={1}
+                    display="flex"
+                    justifyContent="center"
+                    marginLeft={5}
+                  >
+                    Done
+                  </Box>
+                  <AddTaskModal />
+                </Box>
                 {done.map((task, index) => (
                   <TaskCard
                     key={index}
+                    taskId={task.id}
+                    onDelete={deleteTask}
                     title={task.title}
                     description={task.description}
                   />

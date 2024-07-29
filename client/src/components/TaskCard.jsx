@@ -1,5 +1,4 @@
 import React from "react";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
@@ -9,9 +8,11 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
+import EditTaskModal from "./EditTaskModal";
 
 const TaskCard = (props) => {
-  const { title, description } = props;
+  const { taskId, title, description, onDelete } = props;
+
   return (
     <Box margin={2} sx={{ width: "97%" }}>
       <Card sx={{ background: "rgb(243 244 246)", width: "97%" }}>
@@ -24,10 +25,12 @@ const TaskCard = (props) => {
           </Typography>
         </CardContent>
         <CardActions sx={{ justifyContent: "space-between" }}>
-          <IconButton>
-            <EditIcon fontSize="small" />
-          </IconButton>
-          <IconButton>
+          <EditTaskModal />
+          <IconButton
+            onClick={() => {
+              onDelete(taskId);
+            }}
+          >
             <DeleteIcon fontSize="small" />
           </IconButton>
         </CardActions>
