@@ -1,3 +1,4 @@
+import { tableSortLabelClasses } from "@mui/material";
 import axios from "axios";
 
 export const getTaskArrays = async (currentBoard) => {
@@ -59,6 +60,38 @@ export const removeTask = async (taskId, toDo, inProg, done) => {
     return { editToDo, editInProg, editDone };
   } catch (err) {
     console.log("error deleting task", err);
+  }
+};
+
+export const postTask = async (task, toDo, inProg, done) => {
+  try {
+    let editToDo = [...toDo];
+    let editInProg = [...inProg];
+    let editDone = [...done];
+
+    const result = await axios
+      .post("http://localhost:3000/api/tasks", task)
+      .catch((err) => {
+        editToDo = toDo;
+        editInProg = inProg;
+        editDone = done;
+        console.log("axios error adding task", err);
+        return { editToDo, editInProg, editDone };
+      });
+    const { data } = result;
+    const mapStatus = {
+      toDo: editToDo,
+      inProgress: editInProg,
+      done: editDone,
+    };
+    mapStatus[task.status].push({
+      id: data._id,
+      title: data.title,
+      description: data.description,
+    });
+    return { editToDo, editInProg, editDone };
+  } catch (err) {
+    console.log("error creating task", err);
   }
 };
 

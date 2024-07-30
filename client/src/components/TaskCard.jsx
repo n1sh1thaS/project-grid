@@ -11,7 +11,7 @@ import {
 import EditTaskModal from "./EditTaskModal";
 
 const TaskCard = (props) => {
-  const { taskId, title, description, onDelete } = props;
+  const { taskId, title, description, status, onDelete } = props;
 
   return (
     <Box margin={2} sx={{ width: "97%" }}>
@@ -25,7 +25,11 @@ const TaskCard = (props) => {
           </Typography>
         </CardContent>
         <CardActions sx={{ justifyContent: "space-between" }}>
-          <EditTaskModal />
+          <EditTaskModal
+            title={title}
+            description={description}
+            status={status}
+          />
           <IconButton
             onClick={() => {
               onDelete(taskId);

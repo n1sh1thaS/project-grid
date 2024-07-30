@@ -3,9 +3,8 @@ import { Grid, Box } from "@mui/material";
 import NavBar from "../components/NavBar";
 import BoardList from "../components/BoardList";
 import BoardColumn from "../components/BoardColumn";
-import axios from "axios";
 import getBoardInfo from "../services/board-service";
-import { getTaskArrays, removeTask } from "../services/task-service";
+import { getTaskArrays, removeTask, postTask } from "../services/task-service";
 import "../css/board.css";
 
 const Board = () => {
@@ -26,6 +25,21 @@ const Board = () => {
     setToDo(editToDo);
     setInProg(editInProg);
     setDone(editDone);
+  };
+
+  let addTask = async (task) => {
+    let alterTaskArrays = async () => {
+      const { editToDo, editInProg, editDone } = await postTask(
+        task,
+        toDo,
+        inProg,
+        done
+      );
+      setToDo(editToDo);
+      setInProg(editInProg);
+      setDone(editDone);
+    };
+    await alterTaskArrays();
   };
 
   //fetch and set board info
@@ -80,20 +94,26 @@ const Board = () => {
             <BoardColumn
               borderColor="#8B0000"
               taskArr={toDo}
-              deleteTask={deleteTask}
+              //deleteTask={deleteTask}
+              taskActions={{ add: addTask, delete: deleteTask }}
               category="To Do"
+              boardId={currentBoard}
             />
             <BoardColumn
               borderColor="#1C2E4A"
               taskArr={inProg}
-              deleteTask={deleteTask}
+              //deleteTask={deleteTask}
+              taskActions={{ add: addTask, delete: deleteTask }}
               category="In Progress"
+              boardId={currentBoard}
             />
             <BoardColumn
               borderColor="#023020"
               taskArr={done}
-              deleteTask={deleteTask}
+              //deleteTask={deleteTask}
+              taskActions={{ add: addTask, delete: deleteTask }}
               category="Done"
+              boardId={currentBoard}
             />
           </Box>
         </Grid>
