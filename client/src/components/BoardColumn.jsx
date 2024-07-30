@@ -5,7 +5,7 @@ import TaskCard from "./TaskCard";
 import "../css/board.css";
 
 const BoardColumn = (props) => {
-  const { borderColor, taskArr, deleteTask } = props;
+  const { borderColor, taskArr, deleteTask, category } = props;
   //styles from boardCategory class
   return (
     <>
@@ -23,7 +23,7 @@ const BoardColumn = (props) => {
           marginBottom={3}
           sx={{ fontSize: 25 }}
         >
-          <BoardHeader category="To Do" />
+          <BoardHeader category={category} />
           {taskArr.map((task, index) => (
             <TaskCard
               key={index}
