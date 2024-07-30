@@ -5,7 +5,7 @@ import BoardList from "../components/BoardList";
 import BoardColumn from "../components/BoardColumn";
 import axios from "axios";
 import getBoardInfo from "../services/board-service";
-import getTaskArrays from "../services/task-service";
+import { getTaskArrays, removeTask } from "../services/task-service";
 import "../css/board.css";
 
 const Board = () => {
@@ -17,19 +17,15 @@ const Board = () => {
   const [done, setDone] = useState([]);
 
   let deleteTask = async (taskId) => {
-    const oldTasks = { toDo: [...toDo], inProg: [...inProg], done: [...done] };
-    setToDo(toDo.filter((task) => task.id !== taskId));
-    setInProg(inProg.filter((task) => task.id !== taskId));
-    setDone(done.filter((task) => task.id !== taskId));
-
-    await axios
-      .delete(`http://localhost:3000/api/tasks/${taskId}`)
-      .catch((err) => {
-        console.log("error deleting task", err);
-        setToDo(oldTasks.toDo);
-        setInProg(oldTasks.inProg);
-        setDone(oldTasks.done);
-      });
+    const { editToDo, editInProg, editDone } = await removeTask(
+      taskId,
+      toDo,
+      inProg,
+      done
+    );
+    setToDo(editToDo);
+    setInProg(editInProg);
+    setDone(editDone);
   };
 
   //fetch and set board info

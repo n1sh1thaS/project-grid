@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getTaskArrays = async (currentBoard) => {
+export const getTaskArrays = async (currentBoard) => {
   try {
     const response = await axios.get(
       `http://localhost:3000/api/boards/${currentBoard}`
@@ -40,4 +40,26 @@ const getTaskDetails = async (taskIds) => {
   }
 };
 
-export default getTaskArrays;
+export const removeTask = async (taskId, toDo, inProg, done) => {
+  try {
+    let editToDo = toDo.filter((task) => task.id !== taskId);
+    let editInProg = inProg.filter((task) => task.id !== taskId);
+    let editDone = done.filter((task) => task.id !== taskId);
+
+    await axios
+      .delete(`http://localhost:3000/api/tasks/${taskId}`)
+      .catch((err) => {
+        editToDo = toDo;
+        editInProg = inProg;
+        editDone = done;
+        console.log("axios error deleting task", err);
+        return { editToDo, editInProg, editDone };
+      });
+
+    return { editToDo, editInProg, editDone };
+  } catch (err) {
+    console.log("error deleting task", err);
+  }
+};
+
+//export default { getTaskArrays, removeTask };
