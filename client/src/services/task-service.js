@@ -130,5 +130,3 @@ export const putTask = async (taskId, task, toDo, inProg, done) => {
     };
   }
 };
-
-//export default { getTaskArrays, removeTask };

@@ -10,14 +10,24 @@ const BoardColumn = (props) => {
   if (category === "In Progress") status = "inProgress";
   if (category === "Done") status = "done";
   //styles from boardCategory class
+
+  const handleDrop = (e, newStatus) => {
+    e.preventDefault();
+    const task = JSON.parse(e.dataTransfer.getData("taskData"));
+    taskActions.edit(task.taskId, task.title, task.description, newStatus);
+  };
+
   return (
-    <>
-      <Box
-        className="boardCategory"
-        sx={{
-          borderTop: `2px solid ${borderColor}`,
-          borderBottom: `2px solid ${borderColor}`,
-        }}
+    <Box
+      className="boardCategory"
+      sx={{
+        borderTop: `2px solid ${borderColor}`,
+        borderBottom: `2px solid ${borderColor}`,
+      }}
+    >
+      <div
+        onDrop={(e) => handleDrop(e, status)}
+        onDragOver={(e) => e.preventDefault()}
       >
         <Typography
           variant="h3"
@@ -45,8 +55,8 @@ const BoardColumn = (props) => {
             />
           ))}
         </Typography>
-      </Box>
-    </>
+      </div>
+    </Box>
   );
 };
 

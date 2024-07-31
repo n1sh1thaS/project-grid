@@ -15,32 +15,44 @@ const TaskCard = (props) => {
 
   return (
     <Box margin={2} sx={{ width: "97%" }}>
-      <Card sx={{ background: "rgb(243 244 246)", width: "97%" }}>
-        <CardContent align="left">
-          <Typography gutterBottom variant="body1" component="div">
-            {title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-        </CardContent>
-        <CardActions sx={{ justifyContent: "space-between" }}>
-          <EditTaskModal
-            title={title}
-            description={description}
-            status={status}
-            taskId={taskId}
-            onEdit={taskActions.edit}
-          />
-          <IconButton
-            onClick={() => {
-              taskActions.delete(taskId);
-            }}
-          >
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </CardActions>
-      </Card>
+      <div
+        draggable
+        onDragStart={(e) => {
+          const taskData = {
+            taskId,
+            title,
+            description,
+          };
+          e.dataTransfer.setData("taskData", JSON.stringify(taskData));
+        }}
+      >
+        <Card sx={{ background: "rgb(243 244 246)", width: "97%" }}>
+          <CardContent align="left">
+            <Typography gutterBottom variant="body1" component="div">
+              {title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {description}
+            </Typography>
+          </CardContent>
+          <CardActions sx={{ justifyContent: "space-between" }}>
+            <EditTaskModal
+              title={title}
+              description={description}
+              status={status}
+              taskId={taskId}
+              onEdit={taskActions.edit}
+            />
+            <IconButton
+              onClick={() => {
+                taskActions.delete(taskId);
+              }}
+            >
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </CardActions>
+        </Card>
+      </div>
     </Box>
   );
 };
