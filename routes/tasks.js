@@ -45,19 +45,34 @@ router.put("/:id", async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   try {
-    const task = await Task.findByIdAndUpdate(
-      req.params.id,
+    const oldTask = await Task.findById(req.params.id);
+    if (!oldTask) return res.status(404).send("Task does not exist");
+
+    //update and get new task
+    let newTask = await Task.updateOne(
+      { _id: req.params.id },
       {
         boardId: req.body.boardId,
         title: req.body.title,
         description: req.body.description,
         status: req.body.status,
-      },
-      { new: true }
+      }
     );
-    if (!task) return res.status(404).send("Task does not exist");
+    newTask = await Task.findById(req.params.id);
 
-    res.send(task);
+    //update board
+    if (req.body.status !== oldTask.status) {
+      await Board.updateOne(
+        { _id: oldTask.boardId },
+        {
+          $pull: {
+            [oldTask.status]: oldTask.id,
+          },
+          $addToSet: { [req.body.status]: oldTask._id },
+        }
+      );
+    }
+    res.send(newTask);
   } catch (exception) {
     res.status(400).send(exception.message);
   }

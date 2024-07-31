@@ -98,12 +98,14 @@ export const putTask = async (taskId, task, toDo, inProg, done) => {
       `http://localhost:3000/api/tasks/${taskId}`,
       task
     );
+    await axios.put(`http://localhost:3000/api/tasks/status/${taskId}`, task);
 
     const { data } = result;
     //1: filter out task elem with matching id from taskArrs
     let editToDo = toDo.filter((task) => task.id !== data._id);
     let editInProg = inProg.filter((task) => task.id !== data._id);
     let editDone = done.filter((task) => task.id !== data._id);
+
     //2: push to correct arr
     const mapStatus = {
       ["toDo"]: editToDo,
