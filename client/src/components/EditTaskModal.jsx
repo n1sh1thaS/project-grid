@@ -17,8 +17,17 @@ import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 
 const EditTaskModal = (props) => {
-  const { title, description, status } = props;
+  const { title, description, status, taskId, onEdit } = props;
   const [openModal, setOpenModal] = useState(false);
+  const [statusEdit, setStatus] = useState(status);
+  const [titleEdit, setTitle] = useState(title);
+  const [descriptionEdit, setDescription] = useState(description);
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    onEdit(taskId, titleEdit, descriptionEdit, statusEdit);
+    setOpenModal(false);
+  };
 
   const modalStyle = {
     position: "absolute",
@@ -51,60 +60,65 @@ const EditTaskModal = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={modalStyle}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <TextField
-              id="standard-basic"
-              defaultValue={title}
-              label="Title"
-              variant="standard"
-            />
-            <TextField
-              id="standard-basic"
-              defaultValue={description}
-              label="Description"
-              variant="standard"
-            />
-            <div>
-              <FormControl sx={{ marginTop: 1 }}>
-                <FormLabel id="demo-row-radio-buttons-group-label">
-                  Status
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                  defaultValue={status}
-                >
-                  <FormControlLabel
-                    value="To Do"
-                    control={
-                      <Radio
-                        sx={{
-                          "&.Mui-checked": { color: red[400] },
-                        }}
-                      />
-                    }
-                    label="To Do"
-                  />
-                  <FormControlLabel
-                    value="In Progress"
-                    control={<Radio color="primary" />}
-                    label="In Progress"
-                  />
-                  <FormControlLabel
-                    value="Done"
-                    control={<Radio color="success" />}
-                    label="Done"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </div>
-            <Box align="center">
-              <IconButton sx={{ align: "left" }}>
-                <DoneIcon fontSize="small" />
-              </IconButton>
+          <form onSubmit={onSubmit}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <TextField
+                id="standard-basic"
+                defaultValue={title}
+                label="Title"
+                variant="standard"
+                onChange={(res) => setTitle(res.target.value)}
+              />
+              <TextField
+                id="standard-basic"
+                defaultValue={description}
+                label="Description"
+                variant="standard"
+                onChange={(res) => setDescription(res.target.value)}
+              />
+              <div>
+                <FormControl sx={{ marginTop: 1 }}>
+                  <FormLabel id="demo-row-radio-buttons-group-label">
+                    Status
+                  </FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                    defaultValue={status}
+                    onChange={(res) => setStatus(res.target.value)}
+                  >
+                    <FormControlLabel
+                      value="toDo"
+                      control={
+                        <Radio
+                          sx={{
+                            "&.Mui-checked": { color: red[400] },
+                          }}
+                        />
+                      }
+                      label="To Do"
+                    />
+                    <FormControlLabel
+                      value="inProgress"
+                      control={<Radio color="primary" />}
+                      label="In Progress"
+                    />
+                    <FormControlLabel
+                      value="done"
+                      control={<Radio color="success" />}
+                      label="Done"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <Box align="center">
+                <IconButton type="submit" sx={{ align: "left" }}>
+                  <DoneIcon fontSize="small" />
+                </IconButton>
+              </Box>
             </Box>
-          </Box>
+          </form>
         </Box>
       </Modal>
     </>

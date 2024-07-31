@@ -4,7 +4,12 @@ import NavBar from "../components/NavBar";
 import BoardList from "../components/BoardList";
 import BoardColumn from "../components/BoardColumn";
 import getBoardInfo from "../services/board-service";
-import { getTaskArrays, removeTask, postTask } from "../services/task-service";
+import {
+  getTaskArrays,
+  removeTask,
+  postTask,
+  putTask,
+} from "../services/task-service";
 import "../css/board.css";
 
 const Board = () => {
@@ -35,11 +40,38 @@ const Board = () => {
         inProg,
         done
       );
+      console.log(editToDo);
       setToDo(editToDo);
       setInProg(editInProg);
       setDone(editDone);
     };
     await alterTaskArrays();
+  };
+
+  let editTask = async (taskId, titleEdit, descriptionEdit, statusEdit) => {
+    let task = {
+      boardId: currentBoard,
+      title: titleEdit,
+      description: descriptionEdit,
+      status: statusEdit,
+    };
+    let alterTaskArrays = async () => {
+      const { editToDo, editInProg, editDone } = await putTask(
+        taskId,
+        task,
+        toDo,
+        inProg,
+        done
+      );
+      setToDo(editToDo);
+      setInProg(editInProg);
+      setDone(editDone);
+    };
+    try {
+      await alterTaskArrays();
+    } catch (err) {
+      console.log("oops", err);
+    }
   };
 
   //fetch and set board info
@@ -95,7 +127,7 @@ const Board = () => {
               borderColor="#8B0000"
               taskArr={toDo}
               //deleteTask={deleteTask}
-              taskActions={{ add: addTask, delete: deleteTask }}
+              taskActions={{ add: addTask, delete: deleteTask, edit: editTask }}
               category="To Do"
               boardId={currentBoard}
             />
@@ -103,7 +135,7 @@ const Board = () => {
               borderColor="#1C2E4A"
               taskArr={inProg}
               //deleteTask={deleteTask}
-              taskActions={{ add: addTask, delete: deleteTask }}
+              taskActions={{ add: addTask, delete: deleteTask, edit: editTask }}
               category="In Progress"
               boardId={currentBoard}
             />
@@ -111,7 +143,7 @@ const Board = () => {
               borderColor="#023020"
               taskArr={done}
               //deleteTask={deleteTask}
-              taskActions={{ add: addTask, delete: deleteTask }}
+              taskActions={{ add: addTask, delete: deleteTask, edit: editTask }}
               category="Done"
               boardId={currentBoard}
             />

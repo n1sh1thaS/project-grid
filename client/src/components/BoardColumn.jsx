@@ -6,6 +6,9 @@ import "../css/board.css";
 
 const BoardColumn = (props) => {
   const { borderColor, taskArr, taskActions, category, boardId } = props;
+  let status = "toDo";
+  if (category === "In Progress") status = "inProgress";
+  if (category === "Done") status = "done";
   //styles from boardCategory class
   return (
     <>
@@ -32,10 +35,13 @@ const BoardColumn = (props) => {
             <TaskCard
               key={index}
               taskId={task.id}
-              onDelete={taskActions.delete}
+              taskActions={{
+                delete: taskActions.delete,
+                edit: taskActions.edit,
+              }}
               title={task.title}
               description={task.description}
-              status={category}
+              status={status}
             />
           ))}
         </Typography>

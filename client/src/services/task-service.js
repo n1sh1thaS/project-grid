@@ -72,19 +72,16 @@ export const postTask = async (task, toDo, inProg, done) => {
     const result = await axios
       .post("http://localhost:3000/api/tasks", task)
       .catch((err) => {
-        editToDo = toDo;
-        editInProg = inProg;
-        editDone = done;
         console.log("axios error adding task", err);
         return { editToDo, editInProg, editDone };
       });
     const { data } = result;
     const mapStatus = {
-      toDo: editToDo,
-      inProgress: editInProg,
-      done: editDone,
+      ["toDo"]: editToDo,
+      ["inProgress"]: editInProg,
+      ["done"]: editDone,
     };
-    mapStatus[task.status].push({
+    mapStatus[[task.status]].push({
       id: data._id,
       title: data.title,
       description: data.description,
@@ -92,6 +89,41 @@ export const postTask = async (task, toDo, inProg, done) => {
     return { editToDo, editInProg, editDone };
   } catch (err) {
     console.log("error creating task", err);
+  }
+};
+
+export const putTask = async (taskId, task, toDo, inProg, done) => {
+  try {
+    const result = await axios.put(
+      `http://localhost:3000/api/tasks/${taskId}`,
+      task
+    );
+
+    const { data } = result;
+    //1: filter out task elem with matching id from taskArrs
+    let editToDo = toDo.filter((task) => task.id !== data._id);
+    let editInProg = inProg.filter((task) => task.id !== data._id);
+    let editDone = done.filter((task) => task.id !== data._id);
+    //2: push to correct arr
+    const mapStatus = {
+      ["toDo"]: editToDo,
+      ["inProgress"]: editInProg,
+      ["done"]: editDone,
+    };
+    mapStatus[[data.status]].push({
+      id: data._id,
+      title: data.title,
+      description: data.description,
+    });
+
+    return { editToDo, editInProg, editDone };
+  } catch (err) {
+    console.log("error editing task", err);
+    return {
+      editToDo: [...toDo],
+      editInProg: [...inProg],
+      editDone: [...done],
+    };
   }
 };
 
