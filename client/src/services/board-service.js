@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const getBoardInfo = async () => {
+export const getBoardInfo = async () => {
   try {
     const response = await axios.get(
       `http://localhost:3000/api/users/${"669f0aa3646ee27c6499110a"}`
@@ -28,4 +28,14 @@ const getBoardName = async (boardId) => {
   }
 };
 
-export default getBoardInfo;
+export const addBoard = async (board, boardIdArr, boardNameArr) => {
+  try {
+    const result = await axios.post(`http://localhost:3000/api/boards`, board);
+    const { data } = result;
+    boardIdArr.push(data._id);
+    boardNameArr.push(data.boardName);
+    return { boardIdArr, boardNameArr };
+  } catch (err) {
+    console.log("error posting board", err);
+  }
+};

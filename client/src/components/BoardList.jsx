@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import AddBoardModal from "./AddBoardModal";
 const BoardList = (props) => {
-  const { boardNames } = props;
+  const { boardNames, createBoard } = props;
   return (
     <>
       <Box sx={{ borderRight: "2px solid black" }}>
@@ -21,7 +21,7 @@ const BoardList = (props) => {
             justifyContent="center"
           >
             Your Boards
-            <AddBoardModal />
+            <AddBoardModal onCreate={createBoard} />
           </Box>
         </Typography>
         <Typography

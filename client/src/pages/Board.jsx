@@ -3,7 +3,7 @@ import { Grid, Box } from "@mui/material";
 import NavBar from "../components/NavBar";
 import BoardList from "../components/BoardList";
 import BoardColumn from "../components/BoardColumn";
-import getBoardInfo from "../services/board-service";
+import { getBoardInfo, addBoard } from "../services/board-service";
 import {
   getTaskArrays,
   removeTask,
@@ -67,11 +67,26 @@ const Board = () => {
       setInProg(editInProg);
       setDone(editDone);
     };
-    try {
-      await alterTaskArrays();
-    } catch (err) {
-      console.log("oops", err);
-    }
+    await alterTaskArrays();
+  };
+
+  let createBoard = async (boardName) => {
+    const board = {
+      userId: "669f0aa3646ee27c6499110a",
+      boardName,
+    };
+    let alterBoardArrays = async () => {
+      const { boardIdArr, boardNameArr } = await addBoard(
+        board,
+        boardIds,
+        boardNames
+      );
+      console.log(boardIdArr, boardNameArr);
+      setBoardIds(boardIdArr);
+      setBoardNames(boardNameArr);
+      console.log(boardIds, boardNames);
+    };
+    await alterBoardArrays();
   };
 
   //fetch and set board info
@@ -111,7 +126,7 @@ const Board = () => {
           <NavBar />
         </Grid>
         <Grid item xs={12} sm={2} marginTop={8}>
-          <BoardList boardNames={boardNames} />
+          <BoardList boardNames={boardNames} createBoard={createBoard} />
         </Grid>
         <Grid item xs={12} sm={8} marginTop={8}>
           <Box

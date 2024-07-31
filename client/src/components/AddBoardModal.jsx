@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { Modal, Box, IconButton, TextField } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DoneIcon from "@mui/icons-material/Done";
-const AddBoardModal = () => {
+const AddBoardModal = (props) => {
+  const { onCreate } = props;
   const [openModal, setOpenModal] = useState(false);
   const [title, setTitle] = useState("");
 
-  const onSubmit = () => {};
+  const onSubmit = (event) => {
+    event.preventDefault();
+    onCreate(title);
+    setOpenModal(false);
+  };
 
   const modalStyle = {
     position: "absolute",
