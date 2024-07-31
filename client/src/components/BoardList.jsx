@@ -1,6 +1,6 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
-
+import { Box, Typography, IconButton } from "@mui/material";
+import AddBoardModal from "./AddBoardModal";
 const BoardList = (props) => {
   const { boardNames } = props;
   return (
@@ -10,9 +10,19 @@ const BoardList = (props) => {
           variant="h3"
           align="center"
           marginBottom={3}
-          sx={{ fontSize: 30 }}
+          marginLeft={1}
+          sx={{ fontSize: 27 }}
         >
-          Your Boards
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap={2}
+            alignItems="center"
+            justifyContent="center"
+          >
+            Your Boards
+            <AddBoardModal />
+          </Box>
         </Typography>
         <Typography
           variant="body1"

@@ -98,7 +98,6 @@ export const putTask = async (taskId, task, toDo, inProg, done) => {
       `http://localhost:3000/api/tasks/${taskId}`,
       task
     );
-    await axios.put(`http://localhost:3000/api/tasks/status/${taskId}`, task);
 
     const { data } = result;
     //1: filter out task elem with matching id from taskArrs
@@ -121,10 +120,13 @@ export const putTask = async (taskId, task, toDo, inProg, done) => {
     return { editToDo, editInProg, editDone };
   } catch (err) {
     console.log("error editing task", err);
+    let editToDo = [...toDo];
+    let editInProg = [...inProg];
+    let editDone = [...done];
     return {
-      editToDo: [...toDo],
-      editInProg: [...inProg],
-      editDone: [...done],
+      editToDo,
+      editInProg,
+      editDone,
     };
   }
 };
