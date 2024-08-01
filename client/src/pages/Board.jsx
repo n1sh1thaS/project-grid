@@ -88,7 +88,6 @@ const Board = () => {
     };
     await alterBoardArrays();
   };
-
   //fetch and set board info
   useEffect(() => {
     const fetchBoardInfo = async () => {
@@ -126,7 +125,11 @@ const Board = () => {
           <NavBar />
         </Grid>
         <Grid item xs={12} sm={2} marginTop={8}>
-          <BoardList boardNames={boardNames} createBoard={createBoard} />
+          <BoardList
+            boardNames={boardNames}
+            createBoard={createBoard}
+            changeBoard={(index) => setCurrentBoard(boardIds[index])}
+          />
         </Grid>
         <Grid item xs={12} sm={8} marginTop={8}>
           <Box

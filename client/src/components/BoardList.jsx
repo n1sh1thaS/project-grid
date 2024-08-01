@@ -1,22 +1,23 @@
 import React from "react";
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import AddBoardModal from "./AddBoardModal";
 const BoardList = (props) => {
-  const { boardNames, createBoard } = props;
+  const { boardNames, createBoard, changeBoard } = props;
+
   return (
     <>
       <Box sx={{ borderRight: "2px solid black" }}>
         <Typography
           variant="h3"
           align="center"
-          marginBottom={3}
+          marginBottom={1}
           marginLeft={1}
-          sx={{ fontSize: 27 }}
+          sx={{ fontSize: 23 }}
         >
           <Box
             display="flex"
             flexDirection="row"
-            gap={2}
+            gap={1}
             alignItems="center"
             justifyContent="center"
           >
@@ -24,15 +25,30 @@ const BoardList = (props) => {
             <AddBoardModal onCreate={createBoard} />
           </Box>
         </Typography>
-        <Typography
-          variant="body1"
-          align="left"
-          sx={{ fontSize: 20, marginLeft: 3 }}
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignContent="left"
+          justifyItems="left"
+          sx={{ fontSize: 20 }}
         >
           {boardNames.map((board, index) => (
-            <li key={index}>{board}</li>
+            <Button
+              onClick={() => changeBoard(index)}
+              sx={{
+                color: "black",
+                justifyContent: "flex-start",
+                marginLeft: 1,
+                textTransform: "none",
+                fontSize: 17,
+                letterSpacing: "0.8px",
+              }}
+              key={index}
+            >
+              {board}
+            </Button>
           ))}
-        </Typography>
+        </Box>
       </Box>
     </>
   );
