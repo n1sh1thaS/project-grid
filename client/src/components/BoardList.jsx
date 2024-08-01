@@ -1,9 +1,8 @@
 import React from "react";
 import { Box, Typography, Button, IconButton } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
 import AddBoardModal from "./AddBoardModal";
 const BoardList = (props) => {
-  const { boardNames, createBoard, changeBoard, deleteBoard } = props;
+  const { boardNames, createBoard, changeBoard } = props;
 
   return (
     <>
@@ -55,13 +54,6 @@ const BoardList = (props) => {
               >
                 {board}
               </Button>
-              <IconButton
-                onClick={() => {
-                  deleteBoard(index);
-                }}
-              >
-                <DeleteIcon fontSize="small" />
-              </IconButton>
             </Box>
           ))}
         </Box>

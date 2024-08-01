@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, IconButton } from "@mui/material";
 import NavBar from "../components/NavBar";
 import BoardList from "../components/BoardList";
 import BoardColumn from "../components/BoardColumn";
-import { getBoardInfo, addBoard, removeBoard } from "../services/board-service";
+import EditBoardModal from "../components/EditBoardModal";
+import {
+  getBoardInfo,
+  addBoard,
+  removeBoard,
+  putBoard,
+} from "../services/board-service";
 import {
   getTaskArrays,
   removeTask,
   postTask,
   putTask,
 } from "../services/task-service";
+import DeleteIcon from "@mui/icons-material/Delete";
 import "../css/board.css";
 
 const Board = () => {
@@ -89,16 +96,25 @@ const Board = () => {
     await alterBoardArrays();
   };
 
-  let deleteBoard = async (boardIndex) => {
-    await removeBoard(boardIds[boardIndex]);
+  let deleteBoard = async () => {
+    await removeBoard(currentBoard);
     let editBoardIds = [...boardIds];
-    editBoardIds.splice(boardIndex, 1);
+    let index = editBoardIds.indexOf(currentBoard);
+    editBoardIds.splice(index, 1);
     setBoardIds(editBoardIds);
     let editBoardNames = [...boardNames];
-    editBoardNames.splice(boardIndex, 1);
+    editBoardNames.splice(index, 1);
     setBoardNames(editBoardNames);
+    setCurrentBoard(boardIds[0]);
   };
 
+  let editBoard = async (newTitle) => {
+    await putBoard(currentBoard, newTitle);
+    let editBoardNames = [...boardNames];
+    editBoardNames[boardIds.indexOf(currentBoard)] = newTitle;
+    setBoardNames(editBoardNames);
+    console.log(boardNames[boardIds.indexOf(currentBoard)]);
+  };
   //fetch and set board info
   useEffect(() => {
     const fetchBoardInfo = async () => {
@@ -135,15 +151,14 @@ const Board = () => {
         <Grid item xs={12}>
           <NavBar />
         </Grid>
-        <Grid item xs={12} sm={2.2} marginTop={8}>
+        <Grid item xs={12} sm={2} marginTop={8}>
           <BoardList
             boardNames={boardNames}
             createBoard={createBoard}
             changeBoard={(index) => setCurrentBoard(boardIds[index])}
-            deleteBoard={deleteBoard}
           />
         </Grid>
-        <Grid item xs={12} sm={8} marginTop={8}>
+        <Grid item xs={12} sm={9} marginTop={8}>
           <Box
             sx={{
               display: "flex",
@@ -156,7 +171,6 @@ const Board = () => {
             <BoardColumn
               borderColor="#8B0000"
               taskArr={toDo}
-              //deleteTask={deleteTask}
               taskActions={{ add: addTask, delete: deleteTask, edit: editTask }}
               category="To Do"
               boardId={currentBoard}
@@ -164,7 +178,6 @@ const Board = () => {
             <BoardColumn
               borderColor="#1C2E4A"
               taskArr={inProg}
-              //deleteTask={deleteTask}
               taskActions={{ add: addTask, delete: deleteTask, edit: editTask }}
               category="In Progress"
               boardId={currentBoard}
@@ -172,11 +185,19 @@ const Board = () => {
             <BoardColumn
               borderColor="#023020"
               taskArr={done}
-              //deleteTask={deleteTask}
               taskActions={{ add: addTask, delete: deleteTask, edit: editTask }}
               category="Done"
               boardId={currentBoard}
             />
+            <Box marginLeft={1}>
+              <EditBoardModal
+                onEdit={editBoard}
+                title={boardNames[boardIds.indexOf(currentBoard)]}
+              />
+              <IconButton onClick={deleteBoard}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Box>
           </Box>
         </Grid>
       </Grid>

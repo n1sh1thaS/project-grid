@@ -42,9 +42,18 @@ export const addBoard = async (board, boardIdArr, boardNameArr) => {
 
 export const removeBoard = async (boardId) => {
   try {
-    await axios.delete(`http://localhost:3000/api/boards/${boardId}`);
-    return;
+    return await axios.delete(`http://localhost:3000/api/boards/${boardId}`);
   } catch (err) {
     console.log("error deleting board", err);
+  }
+};
+
+export const putBoard = async (boardId, newTitle) => {
+  try {
+    await axios.put(`http://localhost:3000/api/boards/${boardId}`, {
+      boardName: newTitle,
+    });
+  } catch (err) {
+    console.log("error changing board title", err);
   }
 };
