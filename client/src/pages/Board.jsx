@@ -3,7 +3,7 @@ import { Grid, Box } from "@mui/material";
 import NavBar from "../components/NavBar";
 import BoardList from "../components/BoardList";
 import BoardColumn from "../components/BoardColumn";
-import { getBoardInfo, addBoard } from "../services/board-service";
+import { getBoardInfo, addBoard, removeBoard } from "../services/board-service";
 import {
   getTaskArrays,
   removeTask,
@@ -88,6 +88,17 @@ const Board = () => {
     };
     await alterBoardArrays();
   };
+
+  let deleteBoard = async (boardIndex) => {
+    await removeBoard(boardIds[boardIndex]);
+    let editBoardIds = [...boardIds];
+    editBoardIds.splice(boardIndex, 1);
+    setBoardIds(editBoardIds);
+    let editBoardNames = [...boardNames];
+    editBoardNames.splice(boardIndex, 1);
+    setBoardNames(editBoardNames);
+  };
+
   //fetch and set board info
   useEffect(() => {
     const fetchBoardInfo = async () => {
@@ -124,11 +135,12 @@ const Board = () => {
         <Grid item xs={12}>
           <NavBar />
         </Grid>
-        <Grid item xs={12} sm={2} marginTop={8}>
+        <Grid item xs={12} sm={2.2} marginTop={8}>
           <BoardList
             boardNames={boardNames}
             createBoard={createBoard}
             changeBoard={(index) => setCurrentBoard(boardIds[index])}
+            deleteBoard={deleteBoard}
           />
         </Grid>
         <Grid item xs={12} sm={8} marginTop={8}>

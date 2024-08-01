@@ -39,3 +39,12 @@ export const addBoard = async (board, boardIdArr, boardNameArr) => {
     console.log("error posting board", err);
   }
 };
+
+export const removeBoard = async (boardId) => {
+  try {
+    await axios.delete(`http://localhost:3000/api/boards/${boardId}`);
+    return;
+  } catch (err) {
+    console.log("error deleting board", err);
+  }
+};

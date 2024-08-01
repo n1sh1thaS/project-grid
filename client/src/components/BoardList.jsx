@@ -1,8 +1,9 @@
 import React from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import AddBoardModal from "./AddBoardModal";
 const BoardList = (props) => {
-  const { boardNames, createBoard, changeBoard } = props;
+  const { boardNames, createBoard, changeBoard, deleteBoard } = props;
 
   return (
     <>
@@ -33,20 +34,35 @@ const BoardList = (props) => {
           sx={{ fontSize: 20 }}
         >
           {boardNames.map((board, index) => (
-            <Button
-              onClick={() => changeBoard(index)}
-              sx={{
-                color: "black",
-                justifyContent: "flex-start",
-                marginLeft: 1,
-                textTransform: "none",
-                fontSize: 17,
-                letterSpacing: "0.8px",
-              }}
-              key={index}
+            <Box
+              display="flex"
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              {board}
-            </Button>
+              <Button
+                onClick={() => changeBoard(index)}
+                sx={{
+                  color: "black",
+                  justifyContent: "flex-start",
+                  marginLeft: 1,
+                  textTransform: "none",
+                  fontSize: 17,
+                  letterSpacing: "0.8px",
+                  width: "100%",
+                }}
+                key={index}
+              >
+                {board}
+              </Button>
+              <IconButton
+                onClick={() => {
+                  deleteBoard(index);
+                }}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Box>
           ))}
         </Box>
       </Box>
