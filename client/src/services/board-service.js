@@ -2,9 +2,7 @@ import axios from "axios";
 
 export const getBoardInfo = async () => {
   try {
-    const response = await axios.get(
-      `http://localhost:3000/api/users/${"669f0aa3646ee27c6499110a"}`
-    );
+    const response = await axios.get(`http://localhost:3000/api/users/getUser`);
     const { data } = response;
     const boardIdArr = data.boardIds;
     const boardNameArr = await Promise.all(

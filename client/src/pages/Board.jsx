@@ -115,6 +115,7 @@ const Board = () => {
     setBoardNames(editBoardNames);
     console.log(boardNames[boardIds.indexOf(currentBoard)]);
   };
+
   //fetch and set board info
   useEffect(() => {
     const fetchBoardInfo = async () => {
@@ -123,7 +124,7 @@ const Board = () => {
       setBoardNames(boardNameArr);
     };
     fetchBoardInfo();
-  }, []);
+  }, [user]);
 
   //set current board
   useEffect(() => {

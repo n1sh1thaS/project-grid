@@ -2,10 +2,13 @@ const express = require("express");
 const router = express();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const auth = require("../middleware/auth");
 const { User, validate } = require("../models/user");
 
-router.get("/me", async (req, res) => {
-  res.send(await User.findById(req.user._id).select("-password"));
+router.get("/getUser", auth, async (req, res) => {
+  const user = await User.findById(req.user._id).select("-password");
+  if (!user) return res.status(404).send("User does not exist");
+  res.send(user);
 });
 
 //for testing
@@ -13,7 +16,7 @@ router.get("/:id", async (req, res) => {
   res.send(await User.findById(req.params.id).select("-password"));
 });
 
-router.post("/", async (req, res) => {
+router.post("/register", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   try {
@@ -35,6 +38,15 @@ router.post("/", async (req, res) => {
   } catch (ex) {
     console.log(ex.message);
   }
+});
+
+router.post("/login", async (req, res) => {
+  let user = await User.findOne({ email: req.email });
+  if (!user) return res.status(404).send("User not registered");
+  const validPassword = await bcrypt.compare(req.password, user.password);
+  if (!validPassword) return res.status(404).send("Incorrect password");
+  const token = user.generateJWT();
+  res.header("x-auth-token", token).send({ token, user });
 });
 
 module.exports = router;

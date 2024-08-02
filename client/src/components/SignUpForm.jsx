@@ -15,10 +15,11 @@ const SignUpForm = () => {
       password,
     };
     await axios
-      .post("http://localhost:3000/api/users", user)
+      .post("http://localhost:3000/api/users/register", user)
       .then((res) => {
-        const {data} = res;
-        localStorage.setItem('token', data.token);
+        const { data } = res;
+        localStorage.setItem("token", data.token);
+        window.location = "/board";
       })
       .catch((e) => console.log("user cannot be posted"));
   };
