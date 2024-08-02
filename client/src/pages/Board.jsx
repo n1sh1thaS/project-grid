@@ -145,7 +145,7 @@ const Board = () => {
     <>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <NavBar />
+          <NavBar showLogout />
         </Grid>
         <Grid item xs={12} sm={2} marginTop={8}>
           <BoardList
