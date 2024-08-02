@@ -8,7 +8,8 @@ const { User, validate } = require("../models/user");
 router.get("/getUser", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
   if (!user) return res.status(404).send("User does not exist");
-  res.send(user);
+  const id = req.user._id;
+  res.send({ user, id });
 });
 
 //for testing

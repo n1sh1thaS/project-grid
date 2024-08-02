@@ -34,6 +34,7 @@ const BoardList = (props) => {
         >
           {boardNames.map((board, index) => (
             <Box
+              key={index}
               display="flex"
               flexDirection="row"
               justifyContent="space-between"
@@ -50,7 +51,6 @@ const BoardList = (props) => {
                   letterSpacing: "0.8px",
                   width: "100%",
                 }}
-                key={index}
               >
                 {board}
               </Button>

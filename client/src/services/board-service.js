@@ -1,10 +1,10 @@
-import axios from "axios";
+import axios from "./axios-config";
 
 export const getBoardInfo = async () => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/users/getUser`);
+    const response = await axios.get(`/users/getUser`);
     const { data } = response;
-    const boardIdArr = data.boardIds;
+    const boardIdArr = data.user.boardIds;
     const boardNameArr = await Promise.all(
       boardIdArr.map(async (id) => await getBoardName(id))
     );
@@ -16,9 +16,7 @@ export const getBoardInfo = async () => {
 
 const getBoardName = async (boardId) => {
   try {
-    const result = await axios.get(
-      `http://localhost:3000/api/boards/${boardId}`
-    );
+    const result = await axios.get(`/boards/${boardId}`);
     const { data } = result;
     return data.boardName;
   } catch (err) {
@@ -26,10 +24,16 @@ const getBoardName = async (boardId) => {
   }
 };
 
-export const addBoard = async (board, boardIdArr, boardNameArr) => {
+export const addBoard = async (boardName, boardIdArr, boardNameArr) => {
   try {
-    const result = await axios.post(`http://localhost:3000/api/boards`, board);
-    const { data } = result;
+    const userRes = await axios.get(`/users/getUser`);
+    const userData = userRes.data;
+    const board = {
+      userId: userData.id,
+      boardName,
+    };
+    const boardRes = await axios.post(`/boards`, board);
+    const { data } = boardRes;
     boardIdArr.push(data._id);
     boardNameArr.push(data.boardName);
     return { boardIdArr, boardNameArr };
@@ -40,7 +44,7 @@ export const addBoard = async (board, boardIdArr, boardNameArr) => {
 
 export const removeBoard = async (boardId) => {
   try {
-    return await axios.delete(`http://localhost:3000/api/boards/${boardId}`);
+    return await axios.delete(`/boards/${boardId}`);
   } catch (err) {
     console.log("error deleting board", err);
   }
@@ -48,7 +52,7 @@ export const removeBoard = async (boardId) => {
 
 export const putBoard = async (boardId, newTitle) => {
   try {
-    await axios.put(`http://localhost:3000/api/boards/${boardId}`, {
+    await axios.put(`/boards/${boardId}`, {
       boardName: newTitle,
     });
   } catch (err) {

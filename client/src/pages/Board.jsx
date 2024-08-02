@@ -47,7 +47,6 @@ const Board = () => {
         inProg,
         done
       );
-      console.log(editToDo);
       setToDo(editToDo);
       setInProg(editInProg);
       setDone(editDone);
@@ -78,13 +77,9 @@ const Board = () => {
   };
 
   let createBoard = async (boardName) => {
-    const board = {
-      userId: "669f0aa3646ee27c6499110a",
-      boardName,
-    };
     let alterBoardArrays = async () => {
       const { boardIdArr, boardNameArr } = await addBoard(
-        board,
+        boardName,
         boardIds,
         boardNames
       );
@@ -124,7 +119,7 @@ const Board = () => {
       setBoardNames(boardNameArr);
     };
     fetchBoardInfo();
-  }, [user]);
+  }, []);
 
   //set current board
   useEffect(() => {
