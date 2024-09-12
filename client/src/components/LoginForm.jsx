@@ -12,6 +12,7 @@ const LoginForm = () => {
       email,
       password,
     };
+    console.log(loginInfo);
     const res = await axios.post(
       "http://localhost:3000/api/users/login",
       loginInfo
@@ -38,7 +39,7 @@ const LoginForm = () => {
           id="outlined-basic"
           label="Email"
           variant="outlined"
-          onChange={() => setEmail(res.target.value)}
+          onChange={(res) => setEmail(res.target.value)}
           sx={{ width: 350 }}
           fullWidth
         />
@@ -46,7 +47,7 @@ const LoginForm = () => {
           id="outlined-basic"
           label="Password"
           variant="outlined"
-          onChange={() => setPassword(res.target.value)}
+          onChange={(res) => setPassword(res.target.value)}
           type="password"
           sx={{ width: 350 }}
           fullWidth

@@ -23,7 +23,6 @@ router.post("/register", async (req, res) => {
   try {
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(404).send("User already registered");
-
     user = new User({
       username: req.body.username,
       email: req.body.email,
@@ -31,7 +30,6 @@ router.post("/register", async (req, res) => {
     });
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(user.password, salt);
-
     await user.save();
 
     const token = user.generateJWT();
@@ -42,9 +40,10 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  let user = await User.findOne({ email: req.email });
+  console.log(req.body);
+  let user = await User.findOne({ email: req.body.email });
   if (!user) return res.status(404).send("User not registered");
-  const validPassword = await bcrypt.compare(req.password, user.password);
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(404).send("Incorrect password");
   const token = user.generateJWT();
   res.header("x-auth-token", token).send({ token, user });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Grid, Box, IconButton } from "@mui/material";
 import NavBar from "../components/NavBar";
 import BoardList from "../components/BoardList";
@@ -20,12 +20,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import "../css/board.css";
 
 const Board = () => {
+  const [loading, setLoading] = useState(true);
   const [currentBoard, setCurrentBoard] = useState("");
   const [boardIds, setBoardIds] = useState([]);
   const [boardNames, setBoardNames] = useState([]);
   const [toDo, setToDo] = useState([]);
   const [inProg, setInProg] = useState([]);
   const [done, setDone] = useState([]);
+  const initializedRef = useRef(false);
 
   let deleteTask = async (taskId) => {
     const { editToDo, editInProg, editDone } = await removeTask(
@@ -123,7 +125,17 @@ const Board = () => {
 
   //set current board
   useEffect(() => {
-    if (boardIds.length > 0) setCurrentBoard(boardIds[0]);
+    const initializeBoards = async () => {
+      const hasFirstBoard = localStorage.getItem("hasFirstBoard");
+      if (hasFirstBoard && boardIds.length > 0) setCurrentBoard(boardIds[0]);
+      else if (!initializedRef.current && !hasFirstBoard) {
+        await createBoard("Untitled");
+        localStorage.setItem("hasFirstBoard", "true");
+        initializedRef.current = true;
+      }
+    };
+    initializeBoards();
+    setLoading(false);
   }, [boardIds]);
 
   //fetch and set task info
@@ -140,6 +152,10 @@ const Board = () => {
     };
     fetchTaskInfo();
   }, [currentBoard]);
+
+  if (loading) {
+    return <div>Loading...</div>; // Show loading state if needed
+  }
 
   return (
     <>

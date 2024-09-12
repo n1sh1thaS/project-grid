@@ -1,6 +1,7 @@
 import { TextField, Button, Box } from "@mui/material";
 import { useState } from "react";
-import axios from "axios";
+import { addBoard } from "../services/board-service";
+import axios from "../services/axios-config";
 
 const SignUpForm = () => {
   const [username, setUsername] = useState("");
@@ -14,15 +15,28 @@ const SignUpForm = () => {
       email,
       password,
     };
-    await axios
-      .post("http://localhost:3000/api/users/register", user)
-      .then((res) => {
-        const { data } = res;
-        localStorage.setItem("token", data.token);
-        window.location = "/board";
-      })
-      .catch((e) => console.log("user cannot be posted"));
+    try {
+      const res = await axios.post("/users/register", user);
+      const { data } = res;
+      //console.log(data, data.token);
+      localStorage.setItem("token", data.token);
+      //console.log("enter function");
+      //await createFirstBoard();
+      //console.log("exit function");
+      window.location = "/board";
+    } catch (e) {
+      console.log("user cannot be posted", e);
+    }
   };
+  /*const createFirstBoard = async () => {
+    try {
+      const res = await addBoard("Untitled", [], []);
+      const { data } = res;
+      console.log(data);
+    } catch (err) {
+      console.log("error creating first board", err);
+    }
+  };*/
 
   return (
     <form onSubmit={onSubmit}>
