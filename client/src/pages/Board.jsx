@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Box, IconButton } from "@mui/material";
 import NavBar from "../components/NavBar";
 import BoardList from "../components/BoardList";
@@ -20,14 +20,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import "../css/board.css";
 
 const Board = () => {
-  const [loading, setLoading] = useState(true);
-  const [currentBoard, setCurrentBoard] = useState("");
   const [boardIds, setBoardIds] = useState([]);
   const [boardNames, setBoardNames] = useState([]);
+  const [currentBoard, setCurrentBoard] = useState(boardIds[0]);
   const [toDo, setToDo] = useState([]);
   const [inProg, setInProg] = useState([]);
   const [done, setDone] = useState([]);
-  const initializedRef = useRef(false);
 
   let deleteTask = async (taskId) => {
     const { editToDo, editInProg, editDone } = await removeTask(
@@ -85,10 +83,8 @@ const Board = () => {
         boardIds,
         boardNames
       );
-      console.log(boardIdArr, boardNameArr);
-      setBoardIds(boardIdArr);
-      setBoardNames(boardNameArr);
-      console.log(boardIds, boardNames);
+      setBoardIds([...boardIdArr]);
+      setBoardNames([...boardNameArr]);
     };
     await alterBoardArrays();
   };
@@ -121,22 +117,19 @@ const Board = () => {
       setBoardNames(boardNameArr);
     };
     fetchBoardInfo();
-  }, []);
+  }, [boardNames]);
 
   //set current board
   useEffect(() => {
     const initializeBoards = async () => {
-      const hasFirstBoard = localStorage.getItem("hasFirstBoard");
-      if (hasFirstBoard && boardIds.length > 0) setCurrentBoard(boardIds[0]);
-      else if (!initializedRef.current && !hasFirstBoard) {
+      const { boardIdArr } = await getBoardInfo();
+      if (!boardIdArr.length) {
         await createBoard("Untitled");
-        localStorage.setItem("hasFirstBoard", "true");
-        initializedRef.current = true;
+        setBoardNames(["Untitled"]);
       }
     };
     initializeBoards();
-    setLoading(false);
-  }, [boardIds]);
+  }, []);
 
   //fetch and set task info
   useEffect(() => {
@@ -152,10 +145,6 @@ const Board = () => {
     };
     fetchTaskInfo();
   }, [currentBoard]);
-
-  if (loading) {
-    return <div>Loading...</div>; // Show loading state if needed
-  }
 
   return (
     <>
